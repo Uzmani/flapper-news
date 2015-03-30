@@ -14,6 +14,9 @@ var mongoose = require('mongoose');
 //connecting to mongodb
 mongoose.connect('mongodb://localhost/news');
 
+require('./models/Posts');
+require('./models/Comments');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
