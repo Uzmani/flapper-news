@@ -46,9 +46,11 @@ router.param('post', function(req, res, next, id) {
 	});
 });
 
-router.get('/posts/:post', function(req, res) {
-	req.posts.populate('comments', function(err, post){ 
-		res.json(req.post);
+router.get('/posts/:post', function(req, res, next) {
+	 req.post.populate('comments', function(err, post) {
+    	if (err) { return next(err); }
+
+    	res.json(post);
 	});
 });
 
@@ -63,19 +65,20 @@ router.put('/posts/:post/upvote', function(req, res, next) {
 
 // Comment ROUTES =======================
 
-router.post('/posts/:post/comments', function(req,res,next) {
-	var comment = new Comment(req.body);
+router.post('/posts/:post/comments', function(req, res, next) {
+  var comment = new Comment(req.body);
+  comment.post = req.post;
 
-	commment.save(function(err, comment) {
-		if (err) { return next(err) };
+  comment.save(function(err, comment){
+    if(err){ return next(err); }
 
-		req.post.comments.push(comment);
-		req.post.save(function(err, post) {
-			if(err) { return next(err); }
+    req.post.comments.push(comment);
+    req.post.save(function(err, post) {
+      if(err){ return next(err); }
 
-			res.json(comment);
-		});
-	});
+      res.json(comment);
+    });
+  });
 });
 
 router.param('comment', function(req, res, next, id) {
