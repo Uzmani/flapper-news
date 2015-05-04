@@ -17,7 +17,7 @@ var mongoose = require('mongoose');
 
 
 
-//connecting to mongodb
+//connecting to local server mongodb
 mongoose.connect('mongodb://localhost/news');
 
 // view engine setup
